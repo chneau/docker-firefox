@@ -7,10 +7,14 @@
 run: exec
 
 prepareX11:
-	sudo xhost local:root
+	xhost local:root
 
 exec: prepareX11
-	docker run --rm -it -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=$$DISPLAY --device /dev/snd firefox
+	docker run --rm -it \
+	-v /tmp/.X11-unix:/tmp/.X11-unix:ro \
+	-e DISPLAY=$$DISPLAY \
+	--shm-size 1g \
+	firefox
 
 build:
 	docker build -t firefox .
